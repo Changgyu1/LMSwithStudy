@@ -1,31 +1,31 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import usersUserinfoAxios from '../../token/tokenAxios';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-import { useParams } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/Notice.css';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import usersUserinfoAxios from "../../token/tokenAxios";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import { useParams } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/Notice.css";
 function NoticeModal() {
   const { post_no } = useParams();
   const [notice, setNotice] = useState({
     post_no: `${post_no}`,
-    user_no: '',
-    notice_no: '',
-    notice_title: '',
-    notice_content: '',
-    notice_password: '',
+    user_no: "",
+    notice_no: "",
+    notice_title: "",
+    notice_content: "",
+    notice_password: "",
   });
   const [show, setShow] = useState(false); //모달 보여주기
 
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
       // 토큰이 없으면 함수 실행 중단
       try {
         // 서버에 사용자 정보를 가져오는 요청
-        const response = await usersUserinfoAxios.get('/users/userinfo');
+        const response = await usersUserinfoAxios.get("/users/userinfo");
         const userNo = response.data.user_no;
         setUserData((prevUserData) => ({
           ...prevUserData,
@@ -68,9 +68,9 @@ function NoticeModal() {
 
       setNotice(response.data);
     } catch (error) {
-      console.log('user-no' + userData.user_no);
-      console.log('post-no' + notice.post_no);
-      console.error('데이터 저장 불가', error);
+      console.log("user-no" + userData.user_no);
+      console.log("post-no" + notice.post_no);
+      console.error("데이터 저장 불가", error);
     }
     setShow(false);
   };
@@ -79,14 +79,15 @@ function NoticeModal() {
     <div>
       <div>
         <h4 className="notice">
-          Notice{' '}
+          Notice 💡
           <Button
-            className="Modal_btn"
+            className="notice_btn"
             variant="outline-primary"
             onClick={handleShow}
           >
-            공지글+
+            공지글 +
           </Button>
+          Chatting 💬
         </h4>
       </div>
 
@@ -105,8 +106,9 @@ function NoticeModal() {
               value={userData.user_no}
               onChange={handleInputChange}
             />
-            공지글 제목 :
+            <div className="notice_modal_title">공지글 제목 :</div>
             <input
+              className="notice_title_textInput"
               type="text"
               name="notice_title"
               value={notice.notice_title}
@@ -116,10 +118,10 @@ function NoticeModal() {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {' '}
-          내용 :
+          {" "}
+          <div className="notice_modal_content">내용 :</div>
           <input
-            className="textInput"
+            className="notice_content_textInput"
             type="text"
             name="notice_content"
             value={notice.notice_content}
@@ -128,8 +130,9 @@ function NoticeModal() {
           />
         </Modal.Body>
         <Modal.Footer>
-          비밀번호(숫자4자리)
+          <div className="notice_title_password"> 비밀번호(숫자4자리) </div>
           <input
+            className="notice_modal_password"
             type="password"
             name="notice_password"
             maxLength="4"

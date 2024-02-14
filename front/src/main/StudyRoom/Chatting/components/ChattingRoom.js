@@ -104,12 +104,7 @@ const Room = () => {
                     fontFamily: "SUITE-Regular",
                   }}
                 >
-                  <img
-                    src={`data:image/jpeg;base64,${userData.user_profile}`}
-                    alt="girl"
-                    width="30px"
-                    height="30px"
-                  />
+                  <img src={Girl} alt="girl" width="30px" height="30px" />
                   {message.nickname} {message.message && `: ${message.message}`}{" "}
                 </div>
               </div>

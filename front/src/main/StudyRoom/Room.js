@@ -9,10 +9,15 @@ import MomentModal from "./MomentModal";
 import Notice from "./Notice";
 import Moment from "./Moment";
 import DayCount from "./DayCount";
-import StudyRoomSkills from "./StudyRoomSkills";
+
+import ReactCalendar from "./ReactCalendar";
+import TodoApp from "./Todo/TodoApp";
 import StudyRoomTitle from "./StudyRoomTitle";
 import Application from "./Application";
-import Chat from "./Chatting/pages/ChattingPage";
+import ChattingPage from "./Chatting/pages/ChattingPage";
+import Footer from "../../main/Footer";
+import Calender from "./TodoList/Calender";
+
 const StudyRoom = () => {
   const [userData, setUserData] = useState("");
 
@@ -52,10 +57,12 @@ const StudyRoom = () => {
           <DayCount />
           <br />
           <br />
-
-          <StudyRoomSkills />
+          <br />
+          <br />
+          <br />
           <br />
 
+          <Calender />
           <br />
           <div></div>
 
@@ -67,7 +74,16 @@ const StudyRoom = () => {
           <NoticeModal />
           <br />
 
-          <Notice />
+          <div style={{ display: "flex" }}>
+            <Notice />
+            <ChattingPage />
+          </div>
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br />
           <br />
           <br />
@@ -79,8 +95,16 @@ const StudyRoom = () => {
         <br />
         <br />
         <br />
-        <Chat />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
       </div>
+      <Footer />
     </div>
   );
 };

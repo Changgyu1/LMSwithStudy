@@ -1,26 +1,26 @@
-import { useState, useEffect } from 'react';
-import '../../css/MainPageCss.css';
-import { useParams } from 'react-router-dom';
-import usersUserinfoAxios from '../../token/tokenAxios';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/Notice.css';
-import StudyRoomTitle from './StudyRoomTitle';
+import { useState, useEffect } from "react";
+import "../../css/MainPageCss.css";
+import { useParams } from "react-router-dom";
+import usersUserinfoAxios from "../../token/tokenAxios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./css/Notice.css";
+import StudyRoomTitle from "./StudyRoomTitle";
 //select
 //delete = password이용 해서 삭제
 
 const Notice = () => {
   const { post_no } = useParams();
-  const [userData, setUserData] = useState('');
+  const [userData, setUserData] = useState("");
   const [showInput, setShowInput] = useState(false); //x버튼 누르면 보여줄 비밀번호 input창
   const [selectedNoticeKey, setSelectedNoticeKey] = useState(null); // 선택된 공지의 notice_no를 저장
   const [notice, setNotice] = useState({
-    post_no: '',
-    user_no: '',
-    notice_no: '',
-    nickname: '',
-    notice_title: '',
-    notice_content: '',
-    notice_password: '',
+    post_no: "",
+    user_no: "",
+    notice_no: "",
+    nickname: "",
+    notice_title: "",
+    notice_content: "",
+    notice_password: "",
   });
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const Notice = () => {
       // 토큰이 없으면 함수 실행 중단
       try {
         // 서버에 사용자 정보를 가져오는 요청
-        const response = await usersUserinfoAxios.get('/users/userinfo');
+        const response = await usersUserinfoAxios.get("/users/userinfo");
         const userNo = response.data.user_no;
 
         setUserData((prevUserData) => ({
@@ -63,7 +63,7 @@ const Notice = () => {
         console.log(response.data);
       } catch (error) {
         //console.error("Failed to fetch user data.", error);
-        console.log('값을 못불러와요', error);
+        console.log("값을 못불러와요", error);
         setNotice([]);
       }
     };
@@ -90,18 +90,18 @@ const Notice = () => {
           withCredentials: true,
         }
       );
-      console.log('Server response:', response.data);
-      console.log('passwordMatched:', response.data.passwordMatched);
+      console.log("Server response:", response.data);
+      console.log("passwordMatched:", response.data.passwordMatched);
       if (selectedNotice.notice_password === notice.notice_password) {
         // 비밀번호가 일치하면 페이지 새로고침
-        alert('삭제 성공');
+        alert("삭제 성공");
         window.location.reload();
       } else {
         // 비밀번호가 일치하지 않으면 알림창 띄우기
-        alert('비밀번호가 일치하지 않습니다.');
+        alert("비밀번호가 일치하지 않습니다.");
       }
     } catch (error) {
-      console.error('삭제 불가', error);
+      console.error("삭제 불가", error);
     }
   };
 
@@ -111,11 +111,11 @@ const Notice = () => {
         {Array.isArray(selNotice) && selNotice.length > 0 ? (
           selNotice.map((selNotice) => (
             <li className="notice_list" key={selNotice.notice_no}>
-              {' '}
+              {" "}
               {/* selNotice.notice_no 를 key값으로 설정한다 */}
               <div className="notice_writer_info">
-                <p>
-                  작성일 : {selNotice.notice_post_date}{' '}
+                <p className="notice_p">
+                  작성일 : {selNotice.notice_post_date}{" "}
                   {/* 프로필 이미지 가져오는건 나중에하자 .. 
                 <div className="board_info_left">
                   
@@ -131,52 +131,53 @@ const Notice = () => {
           </div>
                   <div>{userData.nickname}</div>
                 </div>*/}
-                  &nbsp;&nbsp;&nbsp;&nbsp;작성자 :{selNotice.nickname}{' '}
+                  &nbsp;&nbsp;&nbsp;&nbsp;작성자 :{selNotice.nickname}{" "}
                 </p>
+                <section>
+                  <div className="notice_delete">
+                    {showInput && selectedNoticeKey === selNotice.notice_no && (
+                      <>
+                        <input
+                          className="notice_password_input"
+                          type="password"
+                          name="notice_password"
+                          maxLength="4"
+                          onChange={handleInputChange}
+                          placeholder="비밀번호 4자리"
+                        />
+                        <button
+                          className="notice_x_button "
+                          onClick={(e) => {
+                            handleDeleteNotice(e, selNotice);
+                          }}
+                        >
+                          삭제
+                        </button>
+                      </>
+                    )}
+                    {/* 'X' 버튼은 누르면 안보이게 */}
+                    <button
+                      className="notice_x_button "
+                      onClick={() => {
+                        setShowInput((prevShowInput) => !prevShowInput);
+                        setSelectedNoticeKey(selNotice.notice_no);
+                      }}
+                      style={{
+                        display:
+                          showInput && selectedNoticeKey === selNotice.notice_no
+                            ? "none"
+                            : "block",
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </section>
               </div>
               <h1 className="notice_title">{selNotice.notice_title}</h1>
               <div className="board_content_border"></div>
               <section className="board_info_section">
                 <div className="notice_content">{selNotice.notice_content}</div>
-              </section>
-              <section>
-                <div className="notice_delete">
-                  {showInput && selectedNoticeKey === selNotice.notice_no && (
-                    <>
-                      <input
-                        className="notice_password_input"
-                        type="password"
-                        name="notice_password"
-                        maxLength="4"
-                        onChange={handleInputChange}
-                      />
-                      <button
-                        className=".notice_x_button "
-                        onClick={(e) => {
-                          handleDeleteNotice(e, selNotice);
-                        }}
-                      >
-                        삭제
-                      </button>
-                    </>
-                  )}
-                  {/* 'X' 버튼은 누르면 안보이게 */}
-                  <button
-                    className=".notice_x_button "
-                    onClick={() => {
-                      setShowInput((prevShowInput) => !prevShowInput);
-                      setSelectedNoticeKey(selNotice.notice_no);
-                    }}
-                    style={{
-                      display:
-                        showInput && selectedNoticeKey === selNotice.notice_no
-                          ? 'none'
-                          : 'block',
-                    }}
-                  >
-                    X
-                  </button>
-                </div>
               </section>
             </li>
           ))

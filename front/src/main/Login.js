@@ -19,24 +19,19 @@ function Login() {
         password,
       });
 
-      if (response.data.token) {
-        const token = response.data.token;
-        localStorage.setItem("token", token);
-        console.log("Login successful. Token:", token);
-        checkLoginStatus();
-        navigate("/");
-      } else if (response.data === "Withdrawal") {
-        alert("Withdrawal: 회원 탈퇴한 사용자입니다.");
-      } else if (response.data === "Error") {
-        alert("아이디 또는 비밀번호를 잘못 입력했습니다.");
-      } else {
-        alert("알 수 없는 오류가 발생했습니다.");
-      }
+      const token = response.data.token;
+
+      localStorage.setItem("token", token);
+      console.log("Login successful. Token:", token);
+      checkLoginStatus();
+      navigate("/"); // 이동 경로 수정
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        alert("유저가 인증되지 않았습니다.");
+        // 401 Unauthorized 에러가 발생한 경우에 대한 처리
+        // 또는 에러 메시지를 사용자에게 표시할 수 있습니다.
+        // setUserMessage("로그인 실패: 유저가 인증되지 않았습니다.");
       } else {
-        alert("에러가 발생했습니다.");
+        // 다른 에러에 대한 처리
       }
     }
   };

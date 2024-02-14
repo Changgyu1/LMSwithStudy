@@ -20,7 +20,7 @@ const App = () => {
     };
 
     // 일정 주기로 토큰 만료 여부 확인 (예: 5분마다)
-    const expirationIntervalId = setInterval(checkTokenExpiration, 1000);
+    const expirationIntervalId = setInterval(checkTokenExpiration, 300000);
 
     const checkTokenValidity = () => {
       if (isTokenAvailable()) {
@@ -31,7 +31,7 @@ const App = () => {
     };
 
     // 일정 주기로 토큰 유효성 체크 (예: 5분마다)
-    const validityIntervalId = setInterval(checkTokenValidity, 1000);
+    const validityIntervalId = setInterval(checkTokenValidity, 300000);
 
     // 컴포넌트가 언마운트될 때 타이머 해제
     return () => {

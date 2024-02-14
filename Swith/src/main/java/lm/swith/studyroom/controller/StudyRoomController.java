@@ -149,7 +149,9 @@ public class StudyRoomController {
 	//Select TodoList
 	@GetMapping("/get/Todo/{post_no}/{todo_date}")
 	public ResponseEntity<List<Todo>> getTodoList(@PathVariable Long post_no, @PathVariable Date todo_date){
+		System.out.println(todo_date + " 날짜");
 		List<Todo> todo = studyRoomService.getTodoList(post_no, todo_date);
+		System.out.println(todo.toArray());
 		 if (!todo.isEmpty()) {
 				return ResponseEntity.ok(todo);
 				 }else {
@@ -164,9 +166,9 @@ public class StudyRoomController {
 	}
 	
 	//Delete TodoList
-	@PostMapping("/delete/Todo/{post_no}/{id}")
-	public ResponseEntity<?> deleteTodoList(@PathVariable Long post_no, @PathVariable Long id, @RequestParam Date todo_date){
-		studyRoomService.deleteTodoList(post_no, id, todo_date);
+	@PostMapping("/studyRoom/delete/Todo/{post_no}/{id}")
+	public ResponseEntity<?> deleteTodoList(@PathVariable Long post_no, @PathVariable Long id, @RequestParam Date params){
+		studyRoomService.deleteTodoList(post_no, id, params);
 		return ResponseEntity.ok("delete success");
 	}
 	
