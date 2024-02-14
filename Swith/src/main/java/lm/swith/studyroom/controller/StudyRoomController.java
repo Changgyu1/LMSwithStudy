@@ -4,17 +4,16 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.security.Timestamp;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import lm.swith.main.model.StudyApplication;
 import lm.swith.main.model.StudyPost;
 import lm.swith.main.service.StudyPostService;
-import lm.swith.studyroom.model.Calendar;
 import lm.swith.studyroom.model.MessageRequestDto;
 import lm.swith.studyroom.model.StudyMoment;
-import lm.swith.studyroom.model.StudyMomentListResponse;
 import lm.swith.studyroom.model.StudyRoomNotice;
 import lm.swith.studyroom.model.Todo;
 import lm.swith.studyroom.service.StudyRoomService;
@@ -140,36 +137,37 @@ public class StudyRoomController {
 		return ResponseEntity.ok(moment);
 	}
 	
-//STUDYROOM CALENDAR 
-	//INSERT
-	@PostMapping("/create/Calendar/{post_no}")
-	public ResponseEntity<?> createCalendarEvent(@PathVariable Long post_no, @RequestBody Calendar calendar) {
-		studyRoomService.createCalendarEvent(calendar);
-		return ResponseEntity.ok(studyRoomService);
+	
+////Calendar &TodoList
+	//TodoList Insert
+	@PostMapping("/create/Todo/{post_no}")
+	public ResponseEntity<Todo> createTodoList(@PathVariable Long post_no, @RequestBody Todo todo){
+		studyRoomService.createTodoList(todo);
+		return ResponseEntity.ok(todo);
 	}
 	
-//STUDYROOM TODO
-	//INSERT
-	@PostMapping("/create/Todo/{post_no}")
-	public ResponseEntity<?> createTodoList(@PathVariable Long post_no, @RequestBody Todo todo){
-		System.out.println(todo.getTodo_description());
-		System.out.println(todo.getChecked());
-		System.out.println(todo.getTodo_date());
-		todo.setPost_no(post_no);
-		System.out.println(todo.getPost_no());
-		studyRoomService.createTodoList(todo);
-		return ResponseEntity.ok(studyRoomService);
+	//Select TodoList
+	@GetMapping("/get/Todo/{post_no}/{todo_date}")
+	public ResponseEntity<List<Todo>> getTodoList(@PathVariable Long post_no, @PathVariable Date todo_date){
+		List<Todo> todo = studyRoomService.getTodoList(post_no, todo_date);
+		 if (!todo.isEmpty()) {
+				return ResponseEntity.ok(todo);
+				 }else {
+					 return ResponseEntity.noContent().build();
+				 }
 	}
-	@GetMapping("/get/Todo/{date}")
-	public ResponseEntity<?>getTodoListByDate(@PathVariable Date todo_date){
-		 try {
-	            List<Todo> todoList = studyRoomService.getTodoListByDate(todo_date);
-	            return ResponseEntity.ok(todoList);
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return ResponseEntity.ok("error"); 
-	        }
-		 
+	//Update TodoList
+	@PostMapping("/update/Todo/{post_no}/{id}")
+	public ResponseEntity<?>updateTodoList(@PathVariable Long post_no, @PathVariable Long id, @RequestParam Date todo_date, @RequestParam String todo_list){
+		studyRoomService.updateTodoList(post_no,id,todo_date,todo_list);
+		return ResponseEntity.ok("update Todo List Success");
+	}
+	
+	//Delete TodoList
+	@PostMapping("/delete/Todo/{post_no}/{id}")
+	public ResponseEntity<?> deleteTodoList(@PathVariable Long post_no, @PathVariable Long id, @RequestParam Date todo_date){
+		studyRoomService.deleteTodoList(post_no, id, todo_date);
+		return ResponseEntity.ok("delete success");
 	}
 	
 	// 채팅 SELECT
@@ -208,15 +206,28 @@ public class StudyRoomController {
 	}
 	@GetMapping("/RoomEnd") // 종료된 스터디룸 조회
 	public ResponseEntity<?> selectStudyRoomEnd() {
+		System.out.println("이건?");
 		List<StudyPost> RoomEndInfo = studyRoomService.selectStudyRoomEnd();
-		LocalDate now = LocalDate.now();
-
+		LocalDateTime now2 = LocalDateTime.now();
+		LocalDate now = now2.toLocalDate();
+		System.out.println("이건됨?");
 		for (StudyPost post : RoomEndInfo) {
-			LocalDate roomEnd = LocalDate.parse(post.getStudyroomend());
+			if(post.getStudyroomend() != null) {
+				System.out.println(post.getStudyroomend() + " : getStudyroomend");
+				LocalDateTime roomEndDateTime = LocalDateTime.parse(post.getStudyroomend(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+				LocalDate roomEnd = roomEndDateTime.toLocalDate();
+				System.out.println(roomEnd + " : roomEnd 형식 출력보자");
+				System.out.println(now + " : now 형식 출력보자");
 			int comparison = roomEnd.compareTo(now);
+			System.out.println(now + " : now");
+			System.out.println(comparison + " : comparison");
 			if (comparison == 0) {
+				System.out.println("실행안되냐고 실행전?" + post.getPost_no());
 				studyRoomService.deleteStudyRoomByPostNo(post.getPost_no());
+			
+				System.out.println("실행안되냐고?" + post.getPost_no());
 				studyPostService.deleteStudyPost(post.getPost_no());
+			}
 			}
 		}
 		return ResponseEntity.ok("ok");

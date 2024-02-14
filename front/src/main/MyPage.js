@@ -86,7 +86,7 @@ function MyPage() {
     <div>
       <Header />
       <h1 className="mypage_title_main">My Page {"🍰"}</h1>
-      <h2 className="mypage_title">참여중인 스윗 🚀</h2>
+      <h2 className="mypage_title">활동중인 스윗 🚀</h2>
       <table className="mypage_table" style={{ fontFamily: "SUITE-Regular" }}>
         <thead>
           <tr>
@@ -98,8 +98,8 @@ function MyPage() {
           </tr>
         </thead>
         <tbody>
-          {myOwnStudy &&
-            myOwnStudy.map((study) => (
+          {attendingStudy &&
+            attendingStudy.map((study) => (
               <tr key={study.post_no} onClick={(e) => e.stopPropagation()}>
                 <td>{study.post_no}</td>
                 <td>
@@ -132,8 +132,8 @@ function MyPage() {
           </tr>
         </thead>
         <tbody>
-          {attendingStudy &&
-            attendingStudy.map((study) => (
+          {myOwnStudy &&
+            myOwnStudy.map((study) => (
               <tr key={study.post_no} onClick={(e) => e.stopPropagation()}>
                 <td>{study.post_no}</td>
                 <td>

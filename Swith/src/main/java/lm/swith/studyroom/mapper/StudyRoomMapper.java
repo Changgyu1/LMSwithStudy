@@ -3,13 +3,9 @@ package lm.swith.studyroom.mapper;
 import java.sql.Date;
 import java.util.List;
 
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
 
 import lm.swith.main.model.StudyPost;
-import lm.swith.studyroom.model.Calendar;
 import lm.swith.studyroom.model.MessageRequestDto;
 import lm.swith.studyroom.model.StudyMoment;
 import lm.swith.studyroom.model.StudyRoomNotice;
@@ -45,15 +41,12 @@ public interface StudyRoomMapper {
 
 	List<MessageRequestDto> selectMessagesByPostNo(Long post_no);
     
-//Calendar
-    //INSERT
-	void createCalendarEvent(Calendar calendar);
+	//calendar & TodoList
+	void createTodoList(Todo todo); //insert
+	List<Todo> getTodoList(Long post_no, Date todo_date); // select
+	void updateTodoList(Long post_no,Long id,Date todo_date, String todo_list);//update
+	void deleteTodoList(Long post_no, Long id, Date todo_date);//delete
 	
-//TodoLsit
-	//INSERT
-	void createTodoList(Todo todo);
-
-	List<Todo> getTodoListByDate(Date todo);
 
 //title
 	//SELECT
@@ -67,6 +60,9 @@ public interface StudyRoomMapper {
 		void deleteTodoListPostNo(Long post_no);
 		void deleteStudyMomentPostNo(Long post_no);
 		void deleteStudyRoomNoticeByPostNo(Long post_no);
+		
+		
+
 }
 
 

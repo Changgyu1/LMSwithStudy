@@ -43,11 +43,11 @@ public class AlarmService {
 	    for (Likes info : LikesInfo) {
 	        LocalDateTime recruitDeadline = LocalDateTime.parse(postData.getRecruit_deadline(), dateTimeFormatter);
 	        String formattedDate = recruitDeadline.format(dateFormatter);
-	        String alarmMessage = "찜하신 " + postData.getStudy_title() + "의 게시글이 " + formattedDate + " 마감됩니다.";
-	        if(!alarmMapper.AlarmByData(info.getUser_no(), info.getPost_no(), alarmMessage)) {
+	        String alarm_message = "찜하신 " + postData.getStudy_title() + "의 게시글이 " + formattedDate + " 마감됩니다.";
+	        if(!alarmMapper.AlarmByData(info.getUser_no(), info.getPost_no(), alarm_message)) {
 		        alarm.setPost_no(info.getPost_no());
 		        alarm.setUser_no(info.getUser_no());
-		        alarm.setAlarm_message(alarmMessage);
+		        alarm.setAlarm_message(alarm_message);
 		        alarmMapper.insertAlarm(alarm);
 	        }    
 	    }

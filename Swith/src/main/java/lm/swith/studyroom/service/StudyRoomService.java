@@ -11,7 +11,6 @@ import lm.swith.main.mapper.StudyPostMapper;
 import lm.swith.main.model.StudyApplication;
 import lm.swith.main.model.StudyPost;
 import lm.swith.studyroom.mapper.StudyRoomMapper;
-import lm.swith.studyroom.model.Calendar;
 import lm.swith.studyroom.model.MessageRequestDto;
 import lm.swith.studyroom.model.StudyMoment;
 import lm.swith.studyroom.model.StudyRoomNotice;
@@ -50,7 +49,7 @@ public class StudyRoomService {
 	public void deleteStudyRoomByPostNo(Long post_no) {
 		// StudyRoom 종료 후 스터디 방 삭제를 위한 DELETE
 		studyRoomMapper.deleteMessagePostNo(post_no);
-		studyRoomMapper.deleteTodoListPostNo(post_no);
+		//studyRoomMapper.deleteTodoListPostNo(post_no);
 		studyRoomMapper.deleteStudyMomentPostNo(post_no);
 		studyRoomMapper.deleteStudyRoomNoticeByPostNo(post_no);
 	}
@@ -69,22 +68,24 @@ public class StudyRoomService {
 		studyRoomMapper.deleteStudyRoomNotice(notice_no, notice_password);
 	}
 	
-	//Calendar Service
-	public void createCalendarEvent(Calendar calendar) {
-		studyRoomMapper.createCalendarEvent(calendar);
-	}
-	
-	//Todo Service
-	public void createTodoList(Todo todo) {
-		studyRoomMapper.createTodoList(todo);
-	}
-	public List<Todo> getTodoListByDate(Date todo_date){
-		
-		return studyRoomMapper.getTodoListByDate(todo_date);
-	}
+	//Calendar, Todo
+    public void createTodoList(Todo todo) {
+    	studyRoomMapper.createTodoList(todo);
+    }
+    
+    public List<Todo> getTodoList(Long post_no, Date todo_date){
+    	return studyRoomMapper.getTodoList(post_no, todo_date);
+    }
+    
+    public void updateTodoList(Long post_no,Long id, Date todo_date, String todo_list) {
+    	studyRoomMapper.updateTodoList(post_no,id,todo_date,todo_list);
+    }
+    
+    public void deleteTodoList(Long post_no, Long id, Date todo_date) {
+    	studyRoomMapper.deleteTodoList(post_no, id, todo_date);
+    }
 	
 //Chatting
-	
 	@Transactional // INSERT
 	public void saveChatMessage(MessageRequestDto chatmessage) {
 		System.out.println("실행되었나요? Service");

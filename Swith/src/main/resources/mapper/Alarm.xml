@@ -29,4 +29,8 @@
 		DELETE FROM alarm WHERE ALARM_NO = #{alarm_no}
 	</delete>
 
+    <!-- 알람 삭제 (post_no) 기준 -->
+	<delete id="deleteAlarmBypost_no" parameterType="Long">
+		DELETE FROM alarm WHERE post_no = #{post_no}
+	</delete>
 </mapper>

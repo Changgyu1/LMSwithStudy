@@ -62,6 +62,8 @@ public interface StudyPostMapper {
 		// 스터디 찜 삭제
 		void deleteLikes (@Param("post_no") Long post_no, @Param("user_no") Long user_no);
 		
+		// 스터디 찜 삭제(post_no)기준
+		void deleteLikesByPostNo(Long post_no);
 		// 스터디 찜 카운트
 		int likesCount(Long post_no);
 	
@@ -97,6 +99,8 @@ public interface StudyPostMapper {
 		
 		// 스터디 삭제 OK
 		void deleteStudyPost (@Param("post_no") Long post_no);
+		// 스터디방 삭제를 위한 삭제OK(자동삭제)
+		void deleteStudyPostEnd(Long post_no);
 		
 		// 스터디에 달린 모든 댓글 삭제
 		void deleteComments(@Param("post_no") Long post_no);

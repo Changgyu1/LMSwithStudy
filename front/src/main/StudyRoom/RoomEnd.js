@@ -5,7 +5,7 @@ const StudyRoomChecker = () => {
     const interval = setInterval(async () => {
       try {
         // 서버에 종료된 스터디룸 조회 요청 보내기
-        await usersUserinfoAxios.get("/StudyRoom/RoomEnd");
+        await usersUserinfoAxios.get("/studyRoom/RoomEnd");
 
         // 종료된 스터디룸 처리 로직 구현
         // 예: console.log('종료된 스터디룸을 처리합니다.');

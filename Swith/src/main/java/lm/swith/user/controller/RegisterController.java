@@ -78,25 +78,29 @@ public class RegisterController {
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticate(@RequestBody SwithUser swithUser) {
 		SwithUser user = userService.getByCredentials(swithUser.getEmail(), swithUser.getPassword(), passwordEncoder);
-		System.out.println(user.getSignout());
 		// 사용자의 id, pwd 일치할 경우
-		if (user != null) {
-			if (user.getSignout().equals("FALSE")) { // signout status
-				// 토큰 생성
-				final String token = tokenProvider.createAccessToken(user);
-				final SwithDTO responseUserDTO = SwithDTO.builder().email(user.getEmail()).user_no(user.getUser_no())
-						.username(user.getUsername()).useraddress(user.getUseraddress()).nickname(user.getNickname())
-						.token(token) // 반환된 토큰 적용
-						.build();
-				return ResponseEntity.ok().body(responseUserDTO);
-			} else {
-				return ResponseEntity.badRequest().body("signout");
-			}
-		} else {
-			ResponseDTO responseDTO = ResponseDTO.builder().error("Login faild.").build();
-			return ResponseEntity.badRequest().body(responseDTO);
-		}
 
+	    if (user != null) {
+	        if ("FALSE".equals(user.getSignout())) { // signout status
+	            // 토큰 생성
+	            final String token = tokenProvider.createAccessToken(user);
+	            final SwithDTO responseUserDTO = SwithDTO.builder()
+	                    .email(user.getEmail())
+	                    .user_no(user.getUser_no())
+	                    .username(user.getUsername())
+	                    .useraddress(user.getUseraddress())
+	                    .nickname(user.getNickname())
+	                    .token(token) // 반환된 토큰 적용
+	                    .build();
+	            return ResponseEntity.ok(responseUserDTO);
+			} else if("TRUE".equals(user.getSignout())) { // 회원 탈퇴했을경우
+				return ResponseEntity.ok("Withdrawal");
+			}
+			}  else {
+				return ResponseEntity.ok("Error");
+			}
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("UnknownError");
+		
 	}
 
 	@GetMapping("/userinfo")

@@ -13,7 +13,10 @@ public interface AlarmMapper {
 	
 	Alarm getAlarmByUserNo(Long user_no);
 	
-	boolean  AlarmByData(Long user_no, Long post_no, String AlarmByData);
+	boolean  AlarmByData(Long user_no, Long post_no, String alarm_message);
 	
 	void deleteAlarm(Long alarm_no);
+	
+	// post_no 기준 알람 삭제
+	void deleteAlarmBypost_no(Long post_no);
 }

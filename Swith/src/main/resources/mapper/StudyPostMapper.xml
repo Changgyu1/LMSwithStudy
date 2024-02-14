@@ -118,6 +118,7 @@
 	    LEFT JOIN users u ON sp.user_no = u.user_no
 	    LEFT JOIN comments c ON sp.post_no = c.post_no
 	    WHERE sp.study_status = 'O'
+	    ORDER BY study_post_time DESC
 	</select>
 
 		<!-- 댓글 리스트 -->
@@ -287,6 +288,11 @@
 		= #{user_no}
 	</delete>
 	
+		<!-- 스터디 찜 삭제(post_no) 기준 -->
+	<delete id="deleteLikesByPostNo"
+		parameterType="lm.swith.main.model.Likes">
+		DELETE FROM LIKES WHERE post_no = #{post_no}
+	</delete>
 	 <!-- 게시글별 좋아요 목록 조회 -->
     <select id="likesCount" parameterType="Long" resultType="lm.swith.main.model.Likes">
         SELECT *
@@ -322,9 +328,8 @@
 
 
 	<!-- 내가 참여한 스터디 목록 OK -->
-	<select id="getAllStudiesWithUserNo"
-		resultMap="studyPostWithSkills">
-		SELECT sp.*, s.skill_name, s.skill_img, u.*
+	<select id="getAllStudiesWithUserNo" resultMap="studyPostWithSkills">
+		SELECT sp.*, s.skill_name, u.*
 		FROM study_post sp
 		LEFT JOIN post_tech_stacks pts ON sp.post_no = pts.post_no
 		LEFT JOIN
@@ -332,9 +337,9 @@
 		LEFT JOIN study_application sa ON
 		sp.post_no = sa.POST_NO
 		LEFT JOIN users u ON u.user_no = sp.user_no
-		WHERE sa.user_no = #{user_no} AND sa.status =
-		'승인'
-		ORDER BY sp.study_start DESC
+		WHERE sa.user_no = #{user_no} AND sa.status ='승인'
+		AND sp.study_status='X'
+		ORDER BY sp.study_start
 	</select>
 
 	<!-- 승인된 스터디 인원만 조회 -->
@@ -480,6 +485,11 @@
 	<delete id="deleteStudyPost" parameterType="Long">
 		DELETE FROM
 		STUDY_POST WHERE POST_NO = #{post_no} AND STUDY_STATUS = 'O'
+	</delete>
+	
+	<delete id="deleteStudyPostEnd" parameterType="Long">
+		DELETE FROM
+		STUDY_POST WHERE POST_NO = #{post_no} AND STUDY_STATUS = 'X'
 	</delete>
 
 
@@ -676,6 +686,10 @@
 	<update id="updateStudyRoomEnd" parameterType="lm.swith.main.model.StudyPost">
 	UPDATE STUDY_POST SET STUDYROOMEND = #{studyroomend} WHERE POST_NO = #{post_no}
 	</update>
+		<select id="selectStudyRoomEnd" parameterType="lm.swith.main.model.StudyPost">
+		SELECT STUDYROOMEND, POST_NO FROM STUDY_POST
+	</select>
+
 
 </mapper>
     
